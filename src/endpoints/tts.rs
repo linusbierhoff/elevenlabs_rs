@@ -270,7 +270,7 @@ impl TextToSpeechStream {
     }
 }
 
-type TextToSpeechStreamResponse = Pin<Box<dyn Stream<Item = Result<Bytes>>>>;
+type TextToSpeechStreamResponse = Pin<Box<dyn Stream<Item = Result<Bytes>> + Send>>;
 impl Endpoint for TextToSpeechStream {
     type ResponseBody = TextToSpeechStreamResponse;
 
