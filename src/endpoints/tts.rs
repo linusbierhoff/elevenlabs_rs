@@ -198,25 +198,25 @@ impl SpeechQuery {
         let mut query = String::new();
 
         if let Some(latency) = &self.latency {
-            query.push_str(format!("latency={}", latency).as_str());
+            query.push_str(latency);
         }
         if let Some(output_format) = &self.output_format {
             if !query.is_empty() {
                 query.push('&');
             }
-            query.push_str(format!("output_format={}", output_format).as_str());
+            query.push_str(output_format);
         }
         if let Some(enable_logging) = &self.enable_logging {
             if !query.is_empty() {
                 query.push('&');
             }
-            query.push_str(format!("enable_logging={}", enable_logging).as_str());
+            query.push_str(enable_logging);
         }
         if let Some(enable_ssml_parsing) = &self.enable_ssml_parsing {
             if !query.is_empty() {
                 query.push('&');
             }
-            query.push_str(format!("enable_ssml_parsing={}", enable_ssml_parsing).as_str());
+            query.push_str(enable_ssml_parsing);
         }
         query
     }
