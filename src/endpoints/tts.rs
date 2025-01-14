@@ -198,25 +198,25 @@ impl SpeechQuery {
         let mut query = String::new();
 
         if let Some(latency) = &self.latency {
-            query.push_str(latency);
+            query.push_str(format!("latency={}", latency).as_str());
         }
         if let Some(output_format) = &self.output_format {
             if !query.is_empty() {
                 query.push('&');
             }
-            query.push_str(output_format);
+            query.push_str(format!("output_format={}", output_format).as_str());
         }
         if let Some(enable_logging) = &self.enable_logging {
             if !query.is_empty() {
                 query.push('&');
             }
-            query.push_str(enable_logging);
+            query.push_str(format!("enable_logging={}", enable_logging).as_str());
         }
         if let Some(enable_ssml_parsing) = &self.enable_ssml_parsing {
             if !query.is_empty() {
                 query.push('&');
             }
-            query.push_str(enable_ssml_parsing);
+            query.push_str(format!("enable_ssml_parsing={}", enable_ssml_parsing).as_str());
         }
         query
     }
@@ -291,6 +291,7 @@ impl Endpoint for TextToSpeechStream {
     fn url(&self) -> Url {
         let mut url = BASE_URL.parse::<Url>().unwrap();
         url.set_path(&format!("{}/{}{}", TTS_PATH, self.voice_id.0, STREAM_PATH));
+        url.set_query(self.any_query().as_deref());
         url
     }
 }
