@@ -119,7 +119,7 @@ impl ElevenLabsClient {
             while let Some((i, chunk)) = stream.next().await {
                 let trigger_index = i + 1;
                 let trigger = generation_triggers.contains(&trigger_index);
-
+                println!("Sending text chunk to WebSocket: {:?}", chunk.clone());
                 ws_writer
                     .send(Message::text(TextChunk::new(chunk, trigger).json()?))
                     .await?;
