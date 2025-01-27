@@ -77,6 +77,7 @@ impl ElevenLabsClient {
                 match msg {
                     Message::Text(text) => {
                         let response: WebSocketTTSResponse = serde_json::from_str(&text)?;
+                        println!("Receiving response from WebSocket: {:?}", response.clone());
                         tx.unbounded_send(Ok(response))?;
                     }
                     Message::Close(msg) => {
