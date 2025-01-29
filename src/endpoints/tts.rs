@@ -557,7 +557,6 @@ pub mod ws {
     //! Websocket Text to Speech endpoints
     use super::*;
 
-
     const WS_BASE_URL: &str = "wss://api.elevenlabs.io";
     const WS_STREAM_PATH: &str = "/stream-input";
     const MODEL_ID_QUERY: &str = "model_id";
@@ -718,6 +717,10 @@ pub mod ws {
         pub fn flush(&self) -> bool {
             self.text_to_speech_body.flush
         }
+        
+        pub fn ist_try_trigger_always(&self) -> bool {
+            self.text_to_speech_body.is_try_trigger_always
+        }
         pub fn streams_after_flush(&mut self) -> Option<Vec<StreamAfterFlush>> {
             self.text_to_speech_body.streams_after_flush.take()
         }
@@ -740,8 +743,8 @@ pub mod ws {
         flush: bool,
         #[serde(skip_serializing)]
         streams_after_flush: Option<Vec<StreamAfterFlush>>,
-        //#[serde(skip_serializing)]
-        //is_try_trigger_always: bool,
+        #[serde(skip_serializing)]
+        is_try_trigger_always: bool,
     }
 
     impl<S> WebSocketTTSBody<S>
@@ -755,17 +758,17 @@ pub mod ws {
                 try_trigger_generation: None,
                 flush: false,
                 streams_after_flush: None,
-                //is_try_trigger_always: false,
+                is_try_trigger_always: false,
             }
         }
         pub fn with_try_trigger_generation(mut self, try_trigger_generation: Vec<usize>) -> Self {
             self.try_trigger_generation = Some(try_trigger_generation);
             self
         }
-        //pub fn with_try_trigger_always(mut self) -> Self {
-        //    self.is_try_trigger_always = true;
-        //    self
-        //}
+        pub fn with_try_trigger_always(mut self) -> Self {
+            self.is_try_trigger_always = true;
+            self
+        }
         pub fn with_flush(mut self) -> Self {
             self.flush = true;
             self
