@@ -836,13 +836,15 @@ pub mod ws {
     pub struct TextChunk {
         text: String,
         try_trigger_generation: bool,
+        flush: bool
     }
 
     impl TextChunk {
-        pub fn new(text: String, try_trigger_generation: bool) -> Self {
+        pub fn new(text: String, try_trigger_generation: bool, flush: bool) -> Self {
             TextChunk {
                 text,
                 try_trigger_generation,
+                flush
             }
         }
         pub fn json(self) -> Result<String> {

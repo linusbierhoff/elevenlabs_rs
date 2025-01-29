@@ -112,6 +112,7 @@ impl ElevenLabsClient {
             let generation_triggers = endpoint.try_trigger_generation().unwrap_or_default();
             let flush_streams = endpoint.streams_after_flush();
             let try_trigger_always = endpoint.ist_try_trigger_always();
+            let flush_always = endpoint.flush(); 
             let text_stream = endpoint.text_stream();
             let stream = text_stream.enumerate();
             pin_mut!(stream);
@@ -121,7 +122,7 @@ impl ElevenLabsClient {
                 let trigger_index = i + 1;
                 let trigger = generation_triggers.contains(&trigger_index) || try_trigger_always;
                 ws_writer
-                    .send(Message::text(TextChunk::new(chunk, trigger).json()?))
+                    .send(Message::text(TextChunk::new(chunk, trigger, flush_always).json()?))
                     .await?;
             }
             match flush_streams {
@@ -133,7 +134,7 @@ impl ElevenLabsClient {
                         pin_mut!(stream);
                         while let Some(item) = stream.next().await {
                             ws_writer
-                                .send(Message::text(TextChunk::new(item, true).json()?))
+                                .send(Message::text(TextChunk::new(item, true, flush_always).json()?))
                                 .await?;
                         }
                     }
